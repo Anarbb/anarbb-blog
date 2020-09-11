@@ -5,11 +5,17 @@
 
 
 {% block content %}
-    <br><br><br><br><br><br>
+    {% with messages = get_flashed_messages() %}
+        {% for msg in messages %}
+            <p class="text-light float-right">{{ msg }}</p>
+        {% endfor %}
+    {% endwith %}
+    <br><br><br><br><br>
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>Login</h1>
+                
+                <h1>login</h1>
                 <hr>
                 <form action='/' method='POST'>
                     <div class="form-group">

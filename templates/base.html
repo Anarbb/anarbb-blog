@@ -9,7 +9,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    {% block head %}{% endblock %}    
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    
     <title>{% block title %}{% endblock %}</title>
 
 </head>
@@ -37,7 +39,13 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/register">register</a>
+                    </li>
                 {% endif %}
+                {% if db_current %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">logout</a>
+                    </li>
+            {% endif %}
             </ul>
         </div>
     </nav>

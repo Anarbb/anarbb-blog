@@ -1,5 +1,23 @@
 {% extends "base.html" %}
 
+
 {% block content %}
-{{ email }}
+{% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+        <p class="text-light float-right">{{ msg }}</p>
+    {% endfor %}
+{% endwith %}
+<br><br><br><br><br>
+<div class="form-group">
+    <label>username</label>
+    <input class="form-control" id="disabledInput" type="text" placeholder="{{ username }}" disabled>
+</div>
+<div class="form-group">
+    <label>email</label>
+    <input class="form-control" id="disabledInput" type="text" placeholder="{{ email }}" disabled>
+</div>
+<div class="form-group">
+<label>password</label>
+<input class="form-control" id="disabledInput" type="text" placeholder="{{ password }}" disabled>
+</div>
 {% endblock %}
