@@ -3,7 +3,6 @@ nav, body {
     font-family: 'Roboto Mono', monospace;
 }
 
-h1,
-label {
+h1, label {
     color: white;
 }

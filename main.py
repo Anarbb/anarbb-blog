@@ -25,7 +25,7 @@ def login():
         session['email'] = email
         session['password'] = password
         if email1 == email and password1 == password:
-            return "OK"
+            return redirect(url_for('dashboard'))
         else:
             feedback = f'Wrong password or email'
             return render_template("public/login.html", feedback=feedback, log_current=log_current)
