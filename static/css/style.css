@@ -1,11 +1,7 @@
-nav,
-.container {
-    font-family: 'Roboto Mono', monospace !important;
+nav, body {
+    background-color: black;
+    font-family: 'Roboto Mono', monospace;
 }
-body {
-    background-color: black !important;
-}
-
 
 h1,
 label {
