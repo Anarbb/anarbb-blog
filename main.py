@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from skgen import SkGen
+from cryptpw import Crypt
 from datetime import timedelta
+from flask_sqlalchemy import SQLAlchemy
 
 # Generates a unique secret key
 sk = SkGen(64)
@@ -8,16 +10,28 @@ sk = SkGen(64)
 app = Flask(__name__)
 app.secret_key = sk.gen()
 app.permanent_session_lifetime = timedelta(days=31)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+
+class users(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    username = db.Column("username", db.String(16))
+    email = db.Column("email", db.String(320))
+    password = db.Column("password", db.String(64))
+
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = password
 
 
 @app.route('/', methods=["GET", "POST"])
 def login():
     # Current page
     log_current = True
-    # Debugging login
-    email1 = 'admin@localhost.com'
-    password1 = 'admin'
-    # Checks request method
     if request.method == "POST":
         # Getting request form data
         req = request.form
@@ -31,15 +45,19 @@ def login():
         if missing:
             feedback = f"missing input for {', '.join(missing)}"
             return render_template("public/login.html", feedback=feedback, log_current=log_current)
-        # Adds email and password to a session
-
-        # Checking the debug login and if False sends an error
-        if email1 == email and password1 == password:
-            session.permanent = True
-            session['email'] = email
-            session['password'] = password
-            flash('you successfully logged in.')
-            return redirect(url_for('dashboard'))
+        # Checking the login credantials and if False sends an error
+        email_found = users.query.filter_by(email=email).first()
+        if email_found:
+            if Crypt.verify_password(password, email_found.password):
+                session.permanent = True
+                session['email'] = email
+                session['password'] = password
+                session['username'] = email_found.username
+                flash('you successfully logged in.')
+                return redirect(url_for('dashboard'))
+            else:
+                feedback = f'Wrong password or email'
+                return render_template("public/login.html", feedback=feedback, log_current=log_current)
         else:
             feedback = f'Wrong password or email'
             return render_template("public/login.html", feedback=feedback, log_current=log_current)
@@ -74,6 +92,18 @@ def register():
         else:
             # Adds the data from the form to the db and redirects to the login page
             # add SQL support here
+            user_found = users.query.filter_by(username=username).first()
+            email_found = users.query.filter_by(email=email).first()
+            if user_found:
+                feedback = f"{username} already exists."
+                return render_template("public/register.html", feedback=feedback, reg_current=reg_current)
+            elif email_found:
+                feedback = f"{email} already exists."
+                return render_template("public/register.html", feedback=feedback, reg_current=reg_current)
+            else:
+                usr = users(username, email, Crypt.encrypt_password(password))
+                db.session.add(usr)
+                db.session.commit()
             flash("you have been registered login now.")
             return redirect(url_for('login'))
     else:
@@ -86,7 +116,8 @@ def dashboard():
         db_current = True
         email = session['email']
         password = session['password']
-        return render_template('public/dashboard.html', email=email, password=password, db_current=db_current)
+        username = session['username']
+        return render_template('public/dashboard.html', email=email, password=password, username=username, db_current=db_current)
     else:
         flash('you need to be logged in.')
         return redirect(url_for('login'))
@@ -101,4 +132,5 @@ def logout():
 
 
 if __name__ == "__main__":
+    db.create_all()
     app.run(debug=True, host='192.168.1.9', port=80)
