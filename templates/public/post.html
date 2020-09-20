@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block head %}<link href="{{ url_for('static', filename='css/post.css') }}" rel="stylesheet">{% endblock %}
+    
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+        <p class="text-light float-right">{{ msg }}</p>
+    {% endfor %}
+{% endwith %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>post a blog thread</h1>
+            <hr style="background-color: white;">
+            <form action="/post" method="POST">
+                <label>title</label>
+                <div class="title">
+                    <input type="title" class="form-control" id="title" name="title" required>
+                </div>
+                <br>
+                <label>blog</label>
+                <div class="blog">
+                    <textarea class="form-control" name="post" id="post" rows="10" wrap="soft" required></textarea>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-outline-light">post</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="{{ url_for('static', filename='js/imgup.js') }}"></script>{% endblock %}

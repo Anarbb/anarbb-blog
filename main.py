@@ -2,17 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from skgen import SkGen
 from cryptpw import Crypt
 from datetime import timedelta
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 # Generates a unique secret key
 sk = SkGen(64)
 cookie_life_time_days = 31
-
 app = Flask(__name__)
 app.secret_key = sk.gen()
 app.permanent_session_lifetime = timedelta(days=cookie_life_time_days)
-app.config['SQLALCHEMY_DATABASE_URI'], app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = 'sqlite:///users.sqlite3', False
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dummy.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
@@ -21,17 +21,40 @@ class users(db.Model):
     username = db.Column("username", db.String(16))
     email = db.Column("email", db.String(320))
     password = db.Column("password", db.String(32))
+    type = db.Column("type", db.String(60))
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password, type):
         self.username = username
         self.email = email
         self.password = password
+        self.type = type
 
 
-@app.route('/', methods=["GET", "POST"])
+class posts(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    title = db.Column("title", db.String(64))
+    post = db.Column("post", db.String)
+    posted_by = db.Column("posted_by", db.String)
+    created_date = db.Column("created_date",
+                             db.String, default=datetime.utcnow, nullable=False)
+    views = db.Column("views", db.Integer)
+
+    def __init__(self, title, post, posted_by):
+        self.title = title
+        self.post = post
+        self.posted_by = posted_by
+        #self.created_date = created_date
+        #self.views = views
+
+
+@app.route('/')
+def index():
+    return render_template('public/index.html', blogs=posts.query.all())
+
+
+@app.route('/login', methods=["GET", "POST"])
 def login():
     # Current page
-    log_current = True
     if request.method == "POST":
         # Getting request form data
         req = request.form
@@ -44,26 +67,30 @@ def login():
                 session.permanent = True
                 session['email'] = email
                 session['username'] = email_found.username
+                session['type'] = email_found.type
                 flash('you successfully logged in.')
+                if session['type'] == 'reader':
+                    return redirect(url_for('index'))
                 return redirect(url_for('dashboard'))
             else:
                 feedback = f'Wrong password or email'
-                return render_template("public/login.html", feedback=feedback, log_current=log_current)
+                return render_template("public/login.html", feedback=feedback)
         else:
             feedback = f'Wrong password or email'
-            return render_template("public/login.html", feedback=feedback, log_current=log_current)
+            return render_template("public/login.html", feedback=feedback)
     # Simple page render
-    if 'email' and 'password' in session:
+    if 'email' and 'username' and 'type' in session:
+        if session['type'] == 'reader':
+            flash('you are already logged in.')
+            return redirect(url_for('index'))
         flash('you are already logged in.')
         return redirect(url_for('dashboard'))
     else:
-        return render_template('public/login.html', log_current=log_current)
+        return render_template('public/login.html')
 
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
-    # Current page
-    reg_current = True
     # Checks request method
     if request.method == "POST":
         # Gets POST request data
@@ -77,27 +104,54 @@ def register():
         email_found = users.query.filter_by(email=email).first()
         if user_found:
             feedback = f"{username} already exists."
-            return render_template("public/register.html", feedback=feedback, reg_current=reg_current)
+            return render_template("public/register.html", feedback=feedback)
         elif email_found:
             feedback = f"{email} already exists."
-            return render_template("public/register.html", feedback=feedback, reg_current=reg_current)
+            return render_template("public/register.html", feedback=feedback)
         else:
-            data = users(username, email, Crypt.encrypt_password(password))
+            data = users(username, email,
+                         Crypt.encrypt_password(password), 'reader')
             db.session.add(data)
             db.session.commit()
         flash("you have been registered login now.")
         return redirect(url_for('login'))
     else:
-        return render_template('public/register.html', reg_current=reg_current)
+        if 'email' and 'username' in session:
+            if session['type'] == 'reader':
+                flash('you are already logged in.')
+                return redirect(url_for('index'))
+            flash('you are already logged in.')
+            return redirect(url_for('dashboard'))
+        return render_template('public/register.html')
 
 
 @app.route('/dashboard')
 def dashboard():
-    if 'email' and 'username' in session:
-        db_current = True
+    if 'email' and 'username' and 'type' in session:
+        # Assings session data to variables
         email = session['email']
         username = session['username']
-        return render_template('public/dashboard.html', email=email, username=username, db_current=db_current)
+        return render_template('public/dashboard.html', email=email, username=username, type=type)
+    else:
+        flash('you need to be logged in.')
+        return redirect(url_for('login'))
+
+
+@app.route('/post', methods=["GET", "POST"])
+def post():
+    if request.method == "POST":
+        req = request.form
+        title = req.get('title')
+        post = req.get('post')
+        username = session['username']
+        data = posts(title=title, post=post, posted_by=username)
+        db.session.add(data)
+        db.session.commit()
+    if 'email' and 'username' and 'type' in session:
+        if session['type'] == 'reader':
+            flash('you are not allowed to be on this page.')
+            return redirect(url_for('index'))
+        return render_template('public/post.html')
     else:
         flash('you need to be logged in.')
         return redirect(url_for('login'))
@@ -107,8 +161,10 @@ def dashboard():
 def logout():
     session.pop("email", None)
     session.pop("password", None)
+    session.pop("username", None)
+    session.pop("type", None)
     flash('you have been logged off.')
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":

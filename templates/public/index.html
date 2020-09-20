@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    .card{
+        max-width: 1000px;
+        max-height: 500px !important;
+    }
+    .text-muted {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+</style>
+{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+        <p class="text-light float-right">{{ msg }}</p>
+    {% endfor %}
+{% endwith %}
+
+    <ul class="list-unstyled">
+        {% for blog in blogs %}
+        <div class="card mb-3">
+            <div class="row no-gutters">
+            <div class="col-md-4">
+                <img src="https://ih3.redbubble.net/image.29296497.2511/fc,550x550,white.u3.jpg" class="card-img" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                <h5 class="card-title">{{ blog.title }}</h5>
+                {% if blog.post|length >= 590 %}
+                {% set post = blog.post[:590] %}
+                <p class="card-text">{{ post }}...</p>
+                {% else %}
+                <p class="card-text">{{ blog.post }}...</p>
+                {% endif %}
+                <p class="card-text"><small class="text-muted">{{ blog.created_date[:-7] }}</small></p>
+                </div>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+{% endblock %}

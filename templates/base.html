@@ -9,45 +9,58 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     {% block head %}{% endblock %}
-    
     <title>{% block title %}{% endblock %}</title>
-
 </head>
+
+{% if 'user' and 'email' in session %}
+    {% set logged_in = True %}
+{% else %}
+    {% set logged_in = False %}
+{% endif %}
 
 <body>
     <!-- Nav Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="https://github.com/Anarbb/" target="_blank">anarbb</a>
+        <a class="navbar-brand" href="/">anarbb</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                {% if log_current %}
+            {% if logged_in %}
+                {% if session['type'] == 'admin' or 'writer' %}
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/">login</a>
+                        <a class="nav-link" href="/dashboard">dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/register">register</a>
+                        <a class="nav-link" href="/post">post</a>
+                    </li>
+                </ul>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">dashboard</a>
+                </li>
                 {% endif %}
-                {% if reg_current %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/register">register</a>
-                    </li>
-                {% endif %}
-                {% if db_current %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">logout</a>
-                    </li>
             {% endif %}
-            </ul>
         </div>
+        <ul class="navbar-nav">
+            {% if logged_in %}
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">logout</a>
+            </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link register" href="/register">register</a>
+                </li>
+            {% endif %}
+        </ul>
     </nav>
 
     <!-- Dynamic container -->
@@ -67,6 +80,8 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    {% block script %}{% endblock %}
+    
 </body>
 
 </html>
