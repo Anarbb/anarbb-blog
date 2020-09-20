@@ -1,2 +1,1 @@
-# flask-login
-Flask app for registering and authenticating users
+# flask-blog
