@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}<link href="{{ url_for('static', filename='css/read.css') }}" rel="stylesheet">{% endblock %}
+{% block content %}
+<br><br>
+
+<div class="blog-header">
+    <p class= "text-center" style="color: white; font-size: 32px;">{{ title }}</p>
+    <p class="writer d-flex justify-content-end" style="color: white; font-size: 16px;">posted by: {{ post.posted_by }}</p>
+</div>
+<div class="blog-post">
+<hr>
+<div class="container">
+    <pre>
+{{ post.post }}
+    </pre>
+    <p class="writer d-flex justify-content-end" style="color: white; font-size: 16px;">posted at: {{ post.created_date[:-7] }}</p>
+</div>
+</div>
+{% endblock %}

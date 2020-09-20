@@ -4,6 +4,9 @@ from cryptpw import Crypt
 from datetime import timedelta
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
+from admin import admin
+from user import user
 
 # Generates a unique secret key
 sk = SkGen(64)
@@ -11,6 +14,8 @@ cookie_life_time_days = 31
 app = Flask(__name__)
 app.secret_key = sk.gen()
 app.permanent_session_lifetime = timedelta(days=cookie_life_time_days)
+app.register_blueprint(admin, url_prefix='/admin')
+app.register_blueprint(user, url_prefix='/user')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dummy.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -43,13 +48,11 @@ class posts(db.Model):
         self.title = title
         self.post = post
         self.posted_by = posted_by
-        #self.created_date = created_date
-        #self.views = views
 
 
 @app.route('/')
 def index():
-    return render_template('public/index.html', blogs=posts.query.all())
+    return render_template('public/index.html', blogs=posts.query.order_by(desc(posts._id)).all())
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -69,9 +72,7 @@ def login():
                 session['username'] = email_found.username
                 session['type'] = email_found.type
                 flash('you successfully logged in.')
-                if session['type'] == 'reader':
-                    return redirect(url_for('index'))
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('index'))
             else:
                 feedback = f'Wrong password or email'
                 return render_template("public/login.html", feedback=feedback)
@@ -84,7 +85,7 @@ def login():
             flash('you are already logged in.')
             return redirect(url_for('index'))
         flash('you are already logged in.')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('admin.dashboard'))
     else:
         return render_template('public/login.html')
 
@@ -121,20 +122,8 @@ def register():
                 flash('you are already logged in.')
                 return redirect(url_for('index'))
             flash('you are already logged in.')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('admin.dashboard'))
         return render_template('public/register.html')
-
-
-@app.route('/dashboard')
-def dashboard():
-    if 'email' and 'username' and 'type' in session:
-        # Assings session data to variables
-        email = session['email']
-        username = session['username']
-        return render_template('public/dashboard.html', email=email, username=username, type=type)
-    else:
-        flash('you need to be logged in.')
-        return redirect(url_for('login'))
 
 
 @app.route('/post', methods=["GET", "POST"])
@@ -155,6 +144,12 @@ def post():
     else:
         flash('you need to be logged in.')
         return redirect(url_for('login'))
+
+
+@app.route('/read/<link>')
+def read(link):
+    title = link.replace('-', ' ')
+    return render_template('public/read.html', title=title, post=posts.query.filter_by(title=title).first())
 
 
 @app.route('/logout')

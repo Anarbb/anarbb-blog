@@ -1,0 +1,13 @@
+.blog-post pre{
+    display: inline;
+    color: white;
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -pre-wrap; /* Opera */
+    white-space: -o-pre-wrap; /* Opera */
+    white-space: pre-wrap; /* CSS3 */
+    word-wrap: break-word; /* IE 5.5+ */
+}
+
+hr {
+    background-color: white;
+}
