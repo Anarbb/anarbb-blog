@@ -14,6 +14,11 @@ pip install -r requirments.txt
 ```sh
 python3.8 main.py
 ```
+## Features
+
+* Encrypted passwords.
+* Simple design using bootstrap.
+* Admin panel.
 
 ## Release History
 
