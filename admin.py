@@ -12,7 +12,7 @@ def dashboard():
         # Assings session data to variables
         email = session['email']
         username = session['username']
-        return render_template('public/dashboard.html', email=email, username=username, type=type)
+        return render_template('public/admin.html', email=email, username=username, type=type)
     else:
         flash('you need to be logged in.')
         return redirect(url_for('login'))
