@@ -10,9 +10,7 @@ def dashboard():
             flash('you are not allowed to be on this page.')
             return redirect(url_for('index'))
         # Assings session data to variables
-        email = session['email']
-        username = session['username']
-        return render_template('public/admin.html', email=email, username=username, type=type)
+        return render_template('public/admin.html', email=session['email'], username=session['username'], type=session['type'])
     else:
         flash('you need to be logged in.')
         return redirect(url_for('login'))
