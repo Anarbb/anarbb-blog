@@ -16,7 +16,7 @@ python3.8 main.py
 ```
 ## Features
 
-* Encrypted passwords.
+* Encrypted passwords and cookies.
 * Simple design using bootstrap.
 * Admin/User panel.
 
