@@ -18,7 +18,11 @@ python3.8 main.py
 
 * Encrypted passwords and cookies.
 * Simple design using bootstrap.
-* Admin/User panel.
+
+## Planned Features
+* User and admin panels.
+* A better way to write blog posts.
+* Easy first time run install.
 
 ## Release History
 
