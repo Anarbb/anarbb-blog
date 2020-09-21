@@ -18,7 +18,7 @@ python3.8 main.py
 
 * Encrypted passwords.
 * Simple design using bootstrap.
-* Admin panel.
+* Admin/User panel.
 
 ## Release History
 
