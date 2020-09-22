@@ -20,11 +20,17 @@ python3.8 main.py
 * Simple design using bootstrap.
 
 ## Planned Features
-* User and admin panels.
+* ~~User~~ and admin panels.
 * A better way to write blog posts.
 * Easy first time run install.
 
 ## Release History
+
+* 0.0.2
+    * Added the user panel to change your password and email and incase you're admin delete blogs you made
+    * Changed the structure of the code now it in blueprints instead of one file
+    * Changed the way links are handeled in the read() function
+
 
 * 0.0.1
     * initial release

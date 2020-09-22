@@ -1,53 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from skgen import SkGen
 from cryptpw import Crypt
-from datetime import timedelta
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
+from datetime import timedelta
+from datetime import datetime
+from __init__ import app, db, posts, users
 from admin import admin
 from user import user
 
-# Generates a unique secret key
-sk = SkGen(64)
-cookie_life_time_days = 31
-app = Flask(__name__)
-app.secret_key = sk.gen()
-app.permanent_session_lifetime = timedelta(days=cookie_life_time_days)
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(user, url_prefix='/user')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dummy.sqlite3'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-
-class users(db.Model):
-    _id = db.Column("id", db.Integer, primary_key=True)
-    username = db.Column("username", db.String(16))
-    email = db.Column("email", db.String(320))
-    password = db.Column("password", db.String(32))
-    type = db.Column("type", db.String(60))
-
-    def __init__(self, username, email, password, type):
-        self.username = username
-        self.email = email
-        self.password = password
-        self.type = type
-
-
-class posts(db.Model):
-    _id = db.Column("id", db.Integer, primary_key=True)
-    title = db.Column("title", db.String(64))
-    post = db.Column("post", db.String)
-    posted_by = db.Column("posted_by", db.String)
-    created_date = db.Column("created_date",
-                             db.String, default=datetime.utcnow, nullable=False)
-    views = db.Column("views", db.Integer)
-
-    def __init__(self, title, post, posted_by):
-        self.title = title
-        self.post = post
-        self.posted_by = posted_by
+sk = SkGen(64)
+cookie_life_time_days = 31
+app.secret_key = sk.gen()
+app.permanent_session_lifetime = timedelta(days=cookie_life_time_days)
 
 
 @app.route('/')
@@ -61,7 +28,7 @@ def login():
     if request.method == "POST":
         # Getting request form data
         req = request.form
-        email = email = req.get('email')
+        email = req.get('email')
         password = req.get('password')
         # Checking the login credantials and if False sends an error
         email_found = users.query.filter_by(email=email).first()
@@ -136,6 +103,7 @@ def post():
         data = posts(title=title, post=post, posted_by=username)
         db.session.add(data)
         db.session.commit()
+        flash('Your thread has been posted.')
     if 'email' and 'username' and 'type' in session:
         if session['type'] == 'reader':
             flash('you are not allowed to be on this page.')
@@ -146,16 +114,14 @@ def post():
         return redirect(url_for('login'))
 
 
-@app.route('/read/<link>')
-def read(link):
-    title = link.replace('-', ' ')
-    return render_template('public/read.html', title=title, post=posts.query.filter_by(title=title).first())
+@app.route('/read/<id>')
+def read(id):
+    return render_template('public/read.html', post=posts.query.filter_by(_id=id).first())
 
 
 @app.route('/logout')
 def logout():
     session.pop("email", None)
-    session.pop("password", None)
     session.pop("username", None)
     session.pop("type", None)
     flash('you have been logged off.')
@@ -164,4 +130,4 @@ def logout():
 
 if __name__ == "__main__":
     db.create_all()
-    app.run(debug=True, host='192.168.1.9', port=80)
+    app.run(debug=True, host='192.168.1.6', port=80)

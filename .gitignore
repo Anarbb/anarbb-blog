@@ -3,3 +3,4 @@ venv
 __pycache__
 dummy.sqlite3
 test.py
+test

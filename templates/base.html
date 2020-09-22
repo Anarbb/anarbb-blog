@@ -4,8 +4,9 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,500&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -16,9 +17,9 @@
 </head>
 
 {% if 'user' and 'email' in session %}
-    {% set logged_in = True %}
+{% set logged_in = True %}
 {% else %}
-    {% set logged_in = False %}
+{% set logged_in = False %}
 {% endif %}
 
 {% set type = session['type'] %}
@@ -34,40 +35,40 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     {% if logged_in == False %}
-                        <li class="nav-item">
-                            <br>
-                        </li>
+                    <li class="nav-item">
+                        <br>
+                    </li>
                     {% endif %}
                     {% if logged_in %}
-                        {% if type == 'admin' %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/post">Post</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/admin">Admin panel</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/user">User panel</a>
-                            </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/user">User panel</a>
-                            </li>
-                        {% endif %}
+                    {% if type == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/post">Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Admin panel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user">User panel</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user">User panel</a>
+                    </li>
+                    {% endif %}
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav">
                     {% if logged_in %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/logout">Logout</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/register">Register</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
                     {% endif %}
                 </ul>
             </div>
@@ -80,7 +81,10 @@
         {% endblock %}
         <br>
         <nav class="navbar sticky-bottom navbar-dark">
-            <p><a style="color: white;" href="https://twitter.com/Anarbbb" target="_blank">Twitter <i class="fa fa-twitter" aria-hidden="true"></i></a> <a style="color: white;" href="https://github.com/Anarbb" target="_blank">Github <i class="fa fa-github" aria-hidden="true"></i></a></p>
+            <p><a style="color: white;" href="https://twitter.com/Anarbbb" target="_blank">Twitter <i
+                        class="fa fa-twitter" aria-hidden="true"></i></a> <a style="color: white;"
+                    href="https://github.com/Anarbb" target="_blank">Github <i class="fa fa-github"
+                        aria-hidden="true"></i></a></p>
         </nav>
     </div>
     <!-- Optional JavaScript -->
@@ -95,7 +99,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     {% block script %}{% endblock %}
-    
+
 </body>
 
 </html>
