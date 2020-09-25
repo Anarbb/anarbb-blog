@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,500&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
+    <title>Anarbb - {% block title %}{% endblock %}</title>
+</head>
+
+{% if 'user' and 'email' in session %}
+{% set logged_in = True %}
+{% else %}
+{% set logged_in = False %}
+{% endif %}
+
+{% set type = session['type'] %}
+
+<body>
+    <!-- Nav Bar -->
+    <div id="navibar" class="container">
+        <nav class="navbar sticky-top navbar-expand-md navbar-dark">
+            <a class="navbar-brand" href="/">Anarbb</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    {% if logged_in == False %}
+                    <li class="nav-item">
+                        <br>
+                    </li>
+                    {% endif %}
+                    {% if logged_in %}
+                    {% if type == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/post">Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">Admin panel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user">User panel</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user">User panel</a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if logged_in %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Dynamic container -->
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+        <br>
+        <nav class="navbar sticky-bottom navbar-dark">
+            <p><a style="color: white;" href="https://twitter.com/Anarbbb" target="_blank">Twitter <i
+                        class="fa fa-twitter" aria-hidden="true"></i></a> <a style="color: white;"
+                    href="https://github.com/Anarbb" target="_blank">Github <i class="fa fa-github"
+                        aria-hidden="true"></i></a></p>
+        </nav>
+    </div>
+    <!-- Optional JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    {% block script %}{% endblock %}
+
+</body>
+
+</html>

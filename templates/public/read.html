@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/read.css') }}" rel="stylesheet">{% endblock %}
+{% block content %}
+<br><br>
+{% with messages = get_flashed_messages() %}
+{% for msg in messages %}
+<p class="text-light float-right">{{ msg }}</p>
+{% endfor %}
+{% endwith %}
+<div class="blog-header">
+    <p class="text-center" style="color: white; font-size: 32px;">{{ post.title }}</p>
+    <p class="writer d-flex justify-content-end" style="color: white; font-size: 16px;">posted by: {{ post.posted_by }}
+    </p>
+
+</div>
+<div class="blog-post">
+    <hr>
+    <div class="container">
+        <pre>
+{{ post.post }}
+
+        </pre>
+        <p class="writer d-flex justify-content-end" style="color: white; font-size: 16px;">posted at:
+            {{ post.created_date[:-7] }}
+        </p>
+        <p class="writer d-flex justify-content-end" style="color: white; font-size: 16px;">views:
+            {{ post.views }}
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/register.css') }}" rel="stylesheet">{% endblock %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+
+
+<br><br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% with messages = get_flashed_messages() %}
+            {% for msg in messages %}
+            <p class="text-light float-right">{{ msg }}</p>
+            {% endfor %}
+            {% endwith %}
+            <h1>register</h1>
+            <hr style="background-color: white;">
+            <form action="{{ url_for('register') }}" method="POST">
+                <div class="form-group">
+                    <label>username</label>
+                    <input type="text" class="form-control" id="username" name="username"
+                        placeholder="select a username" maxlength="16" minlength="3" pattern="^[a-zA-Z0-9_.-]*$"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label>email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="enter your email"
+                        maxlength="320" minlength="6" required>
+                </div>
+                <div class="form-group">
+                    <label>password</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="create a password" data-minlength="8"
+                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                </div>
+                <button type="submit" class="btn btn-outline-light">register</button>
+                {% if feedback %}
+                <br>
+                <p class="text-danger float-right">{{ feedback }}</p>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='js/pw.js') }}"></script>{% endblock %}

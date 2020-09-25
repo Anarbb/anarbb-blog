@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}User panel{% endblock %}
+
+{% block content %}
+
+<br>
+<h1>{{ password_data }}</h1>
+<div class="row">
+    <div class="col">
+        {% with messages = get_flashed_messages() %}
+        {% for msg in messages %}
+        <p class="text-danger float-right">{{ msg }}</p>
+        {% endfor %}
+        {% endwith %}
+        <h1>{{ test }}</h1>
+        <h1>{{ username }}'s user panel</h1>
+        <hr style="background-color: white;">
+        <form action='/user/' method='POST'>
+            <div class="form-group">
+                <label for="email">change email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="{{ email }}"
+                    aria-describedby="emailHelp" maxlength="320" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-outline-light">Change</button>
+        </form>
+        <hr>
+        <form action='/user/' method='POST'>
+            <div class="form-group">
+                <label for="password">change your password</label>
+                <input type="password" class="form-control" id="password" name="password"
+                    placeholder="create a password" data-minlength="8"
+                    title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+            </div>
+            <button type="submit" class="btn btn-outline-light">Change</button>
+        </form>
+        <hr>
+        {% if type == 'admin' %}
+        <form action='/user/' method='POST'>
+            <div class="form-group">
+                <label for="posts">delete a post</label>
+                <select class="browser-default custom-select form-control" id="posts" name="posts" required>
+                    <option disabled selected>Select a post</option>
+                    {% for post in posts %}
+                    <option value="{{ post.title }}">{{ post.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-outline-danger">Delete</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='js/pw.js') }}"></script>{% endblock %}

@@ -1,0 +1,10 @@
+nav, body {
+    background-color: black;
+    font-family: 'Roboto Mono', monospace;
+}
+.footer.a {
+    color: white;
+}
+h1, label {
+    color: white;
+}

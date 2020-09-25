@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% for msg in messages %}
+<p class="text-light float-right">{{ msg }}</p>
+{% endfor %}
+{% endwith %}
+<br><br><br>
+<h1>Still working on this one</h1>
+<br><br><br>
+{% endblock %}
