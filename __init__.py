@@ -5,7 +5,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 # 'mysql+pymysql://username:password@localhost/db_name'
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"  # 'sqlite://:memory:/
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///dummy.sqlite3"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 

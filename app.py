@@ -39,10 +39,10 @@ def login():
                 flash('you successfully logged in.')
                 return redirect(url_for('index'))
             else:
-                feedback = f'Wrong password or email'
+                feedback = 'Wrong password or email'
                 return render_template("public/login.html", feedback=feedback)
         else:
-            feedback = f'Wrong password or email'
+            feedback = 'Wrong password or email'
             return render_template("public/login.html", feedback=feedback)
     # Simple page render
     if 'email' and 'username' and 'type' in session:
@@ -110,10 +110,14 @@ def post():
 def read(id):
     # Getting the ID of the thread from the link and passing it as a parameter to the query function
     post = posts.query.filter_by(_id=id).first()
-    views = int(post.views)
-    views += 1
-    post.views = views
-    db.session.commit()
+    if id in session:
+        pass
+    else:
+        views = int(post.views)
+        views += 1
+        post.views = views
+        session[id] = id
+        db.session.commit()
     return render_template('public/read.html', post=posts.query.filter_by(_id=id).first())
 
 
@@ -129,4 +133,4 @@ def logout():
 
 if __name__ == "__main__":
     db.create_all()
-    app.run()
+    app.run(debug=True)
