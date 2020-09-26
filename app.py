@@ -108,8 +108,11 @@ def post():
 
 @app.route('/read/<id>')
 def read(id):
-    # Getting the ID of the thread from the link and passing it as a parameter to the query function
+    # Getting the ID of the thread from the link and passing it as a parameter to the query function and for checks
     post = posts.query.filter_by(_id=id).first()
+    if post == None:
+        flash("that post doesn't exist")
+        return redirect(url_for('index'))
     if id in session:
         pass
     else:
