@@ -11,7 +11,7 @@ from user import user
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(user, url_prefix='/user')
 cookie_life_time_days = 31
-app.secret_key = 'Enter a secret key here'
+app.secret_key = 'bruh'
 app.permanent_session_lifetime = timedelta(days=cookie_life_time_days)
 
 
@@ -110,18 +110,19 @@ def post():
 def read(id):
     # Getting the ID of the thread from the link and passing it as a parameter to the query function and for checks
     post = posts.query.filter_by(_id=id).first()
-    if post == None:
-        flash("that post doesn't exist")
-        return redirect(url_for('index'))
-    if id in session:
-        pass
+    if post:
+        if id in session:
+            pass
+        else:
+            views = int(post.views)
+            views += 1
+            post.views = views
+            session[id] = id
+            db.session.commit()
+        return render_template('public/read.html', post=posts.query.filter_by(_id=id).first())
     else:
-        views = int(post.views)
-        views += 1
-        post.views = views
-        session[id] = id
-        db.session.commit()
-    return render_template('public/read.html', post=posts.query.filter_by(_id=id).first())
+        flash("this post doesn't exist.")
+        return redirect(url_for('index'))
 
 
 @app.route('/logout')
