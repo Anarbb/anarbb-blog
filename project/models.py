@@ -1,6 +1,7 @@
 from project import db
 from datetime import datetime
 
+
 class users(db.Model):
     _id = db.Column("id", db.Integer, primary_key=True)
     username = db.Column("username", db.Text(16))
@@ -20,8 +21,9 @@ class posts(db.Model):
     title = db.Column("title", db.Text(32))
     post = db.Column("post", db.Text(1638300))
     posted_by = db.Column("posted_by", db.Text(16))
-    created_date = db.Column("created_date",
-                             db.Text(32), default=datetime.utcnow, nullable=False)
+    created_date = db.Column(
+        "created_date", db.Text(32), default=datetime.utcnow, nullable=False
+    )
     views = db.Column("views", db.Text(99999999))
 
     def __init__(self, title, post, posted_by, views):
