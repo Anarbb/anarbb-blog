@@ -12,7 +12,7 @@ but feel free to fork it and edit any code to your needs just keep it open sourc
 pip install -r requirments.txt
 ```
 ```sh
-python3.8 main.py
+python3.8 app.py
 ```
 ## Features
 
