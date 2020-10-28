@@ -14,10 +14,6 @@ pip install -r requirments.txt
 ```sh
 python3.8 app.py
 ```
-## Features
-
-* Encrypted passwords and cookies.
-* Simple design using bootstrap.
 
 ## Planned Features
 * ~~User~~ and admin panels.
