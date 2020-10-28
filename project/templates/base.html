@@ -42,7 +42,7 @@
                     {% if logged_in %}
                     {% if type == 'admin' %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/post">Post</a>
+                        <a class="nav-link" href="{{ url_for('post.index') }}">Post</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/admin">Admin panel</a>
@@ -60,14 +60,14 @@
                 <ul class="navbar-nav">
                     {% if logged_in %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" href="{{ url_for('login.index') }}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
+                        <a class="nav-link" href="{{ url_for('register.index') }}">Register</a>
                     </li>
                     {% endif %}
                 </ul>

@@ -5,7 +5,6 @@
 {% block content %}
 
 <br>
-<h1>{{ password_data }}</h1>
 <div class="row">
     <div class="col">
         {% with messages = get_flashed_messages() %}
@@ -13,10 +12,9 @@
         <p class="text-danger float-right">{{ msg }}</p>
         {% endfor %}
         {% endwith %}
-        <h1>{{ test }}</h1>
         <h1>{{ username }}'s user panel</h1>
         <hr style="background-color: white;">
-        <form action='/user/' method='POST'>
+        <form action="{{ url_for('user.index') }}" method='POST'>
             <div class="form-group">
                 <label for="email">change email address</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="{{ email }}"
@@ -25,7 +23,7 @@
             <button type="submit" class="btn btn-outline-light">Change</button>
         </form>
         <hr>
-        <form action='/user/' method='POST'>
+        <form action="{{ url_for('user.index') }}" method='POST'>
             <div class="form-group">
                 <label for="password">change your password</label>
                 <input type="password" class="form-control" id="password" name="password"
@@ -37,7 +35,7 @@
         </form>
         <hr>
         {% if type == 'admin' %}
-        <form action='/user/' method='POST'>
+        <form action="{{ url_for('user.index') }}" method='POST'>
             <div class="form-group">
                 <label for="posts">delete a post</label>
                 <select class="browser-default custom-select form-control" id="posts" name="posts" required>

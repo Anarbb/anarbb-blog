@@ -1,13 +1,14 @@
 from flask import Blueprint, url_for, session, redirect, render_template, flash, request
 from sqlalchemy import desc
-from __init__ import users, posts, db
-from cryptpw import Crypt
+from project import db
+from project.models import posts, users
+from project.cryptpw import Crypt
 
-user = Blueprint('user', __name__)
+user_blueprint = Blueprint('user', __name__, template_folder='templates')
 
 
-@user.route('/', methods=["GET", "POST"])
-def dashboard():
+@user_blueprint.route('/', methods=["GET", "POST"])
+def index():
     # Checks if logged in
     if 'email' and 'username' and 'type' in session:
         if request.method == "POST":
@@ -52,7 +53,7 @@ def dashboard():
                 else:
                     flash('sneaky one ay')
 
-        return render_template('public/user.html', posts=posts.query.filter_by(posted_by=session['username']).order_by(desc(posts._id)).all(), email=session['email'], username=session['username'])
+        return render_template('user/index.html', posts=posts.query.filter_by(posted_by=session['username']).order_by(desc(posts._id)).all(), email=session['email'], username=session['username'])
     else:
         flash('you need to be logged in.')
         return redirect(url_for('login'))

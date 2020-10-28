@@ -1,14 +1,5 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from datetime import timedelta
+from project import db
 from datetime import datetime
-
-app = Flask(__name__)
-# 'mysql+pymysql://username:password@localhost/db_name'
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///dummy.sqlite3"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
 
 class users(db.Model):
     _id = db.Column("id", db.Integer, primary_key=True)

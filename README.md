@@ -25,6 +25,9 @@ python3.8 main.py
 * Easy first time run install.
 
 ## Release History
+* 0.0.3
+    * Cleaned the code
+    * Better folder structure 
 
 * 0.0.2
     * Added the user panel to change your password and email and in-case you're admin delete blogs you made
