@@ -14,11 +14,13 @@ from project.home.views import home_blueprint
 from project.auth.views import auth_blueprint
 from project.post.views import post_blueprint
 from project.user.views import user_blueprint
+from project.admin.views import admin_blueprint
 
 app.register_blueprint(home_blueprint, url_prefix="/home")
 app.register_blueprint(auth_blueprint, url_prefix="/auth")
 app.register_blueprint(post_blueprint, url_prefix="/post")
 app.register_blueprint(user_blueprint, url_prefix="/user")
+app.register_blueprint(admin_blueprint, url_prefix="/admin")
 
 
 @app.route("/")

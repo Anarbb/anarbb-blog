@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% for msg in messages %}
+<p class="text-light float-right">{{ msg }}</p>
+{% endfor %}
+{% endwith %}
+<br><br><br>
+<form action="{{ url_for('admin.index') }}" method="POST">
+    <div class="form-group">
+        <label for="dlt_user">delete a user</label>
+        <select class="form-control" name="dlt_user" id="dlt_user">
+            <option disabled selected>choose a user</option>
+            {% for user in users %}
+            <option value="{{ user.username }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-outline-danger">Delete</button>
+</form>
+<hr>
+<form action="{{ url_for('admin.index') }}" method="POST">
+    <div class="form-group">
+        <label for="edit-user">edit a user</label>
+        <select class="form-control" name="edit-user" id="edit-user">
+            <option disabled selected>choose a user</option>
+            {% for user in users %}
+            <option value="{{ user.username }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-outline-light">Edit</button>
+</form>
+<hr>
+<form action="{{ url_for('admin.index') }}" method="POST">
+    <div class="form-group">
+        <label for="edit-post">edit a post</label>
+        <select class="form-control" name="edit-post" id="edit-post">
+            <option disabled selected>choose a post</option>
+            {% for post in posts %}
+            <option value="{{ post.title }}">{{ post.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-outline-light">Edit</button>
+</form>
+<br><br><br>
+{% endblock %}

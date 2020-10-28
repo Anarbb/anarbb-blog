@@ -33,11 +33,11 @@ def register():
             db.session.add(data)
             db.session.commit()
         flash("you have been registered login now.")
-        return redirect(url_for("login.index"))
+        return redirect(url_for("auth.login"))
     # Checks if the user is already logged in if so redirects them to the index page
     if "email" and "username" and "type" in session:
         flash("you are already logged in.")
-        return redirect(url_for("index"))
+        return redirect(url_for("home.index"))
     return render_template("auth/register.html")
 
 

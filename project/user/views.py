@@ -32,7 +32,7 @@ def index():
                 session.pop("email", None)
                 session.pop("username", None)
                 session.pop("type", None)
-                return redirect(url_for("login"))
+                return redirect(url_for("auth.login"))
             if password:
                 # Changes the password to the desired one with encrypting it then prompts the user to login again
                 username_found.password = Crypt.encrypt_password(password)
@@ -41,7 +41,7 @@ def index():
                 session.pop("email", None)
                 session.pop("username", None)
                 session.pop("type", None)
-                return redirect(url_for("login"))
+                return redirect(url_for("auth.login"))
             if dlt_post:
                 if posted_by_found:
                     # Queries the post using the title and deletes it while checking who is doing the action for security
@@ -61,4 +61,4 @@ def index():
         )
     else:
         flash("you need to be logged in.")
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
