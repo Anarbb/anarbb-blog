@@ -1,6 +1,6 @@
 # Anarbb blog
 > A simple personal blog
-
+> Admin login admin@anarbb-blog.herokuapp.com:CpJpQ69eYNFBAzK
 
 This is a simple blog I made while learning python for 5 months, this is a personal project
 but feel free to fork it and edit any code to your needs just keep it open source as the ``LICENSE`` implies.
