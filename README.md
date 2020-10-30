@@ -16,11 +16,13 @@ python3.8 app.py
 ```
 
 ## Planned Features
-* ~~User~~ and admin panels.
 * A better way to write blog posts.
 * Easy first time run install.
 
 ## Release History
+* 0.0.4
+    * Added an admin panel
+    
 * 0.0.3
     * Cleaned the code
     * Better folder structure 
