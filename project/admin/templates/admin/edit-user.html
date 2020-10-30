@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Editing user {% endblock %}
+
+{% block content %}
+
+<br>
+<div class="row">
+    <div class="col">
+        {% with messages = get_flashed_messages() %}
+        {% for msg in messages %}
+        <p class="text-danger float-right">{{ msg }}</p>
+        {% endfor %}
+        {% endwith %}
+        <h1>editing {{ user.username }}</h1>
+        <hr style="background-color: white;">
+        <form action="{{ url_for('admin.edit_user', username=user.username) }}" method='POST'>
+            <div class="form-group">
+                <label for="email">change email address</label>
+                <input type="email" class="form-control" id="change_email" name="change_email" placeholder="{{ email }}"
+                    aria-describedby="emailHelp" maxlength="320" minlength="6" value="{{ user.email }}" required>
+            </div>
+            <button type="submit" class="btn btn-outline-light">Change</button>
+        </form>
+        <hr>
+        <form action="{{ url_for('admin.edit_user', username=user.username) }}" method='POST'>
+            <div class="form-group">
+                <label for="password">change your password</label>
+                <input type="password" class="form-control" id="change_password" name="change_password"
+                    placeholder="xxxxxxxxx" data-minlength="8"
+                    title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+            </div>
+            <button type="submit" class="btn btn-outline-light">Change</button>
+        </form>
+        <hr>
+        <form action="{{ url_for('admin.edit_user', username=user.username) }}" method='POST'>
+            <div class="form-group">
+                <label for="posts">change their role:</label>
+                <select class="browser-default custom-select form-control" id="role" name="role" required>
+                    <option disabled selected>Select a role</option>
+                    <option value="reader">Reader</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-outline-light">Change</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='js/pw.js') }}"></script>{% endblock %}

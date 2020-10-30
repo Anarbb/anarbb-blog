@@ -20,7 +20,7 @@
             {% endwith %}
             <h1>editing {{ post.title }}...</h1>
             <hr style="background-color: white;">
-            <form method="POST" action="/admin/edit-post/{{ post.title }}">
+            <form method="POST" action="{{ url_for('admin.edit_post', title=post.title) }}">
                 <label>title</label>
                 <div class="title">
                     <input type="title" class="form-control" id="title" name="edited-title" value="{{ post.title }}"

@@ -2,6 +2,7 @@
 from flask import Blueprint, url_for, session, redirect, render_template, flash, request
 from project import db
 from project.models import users, posts
+from project.cryptpw import Crypt
 
 admin_blueprint = Blueprint("admin", __name__, template_folder="templates")
 
@@ -23,7 +24,7 @@ def index():
                 db.session.commit()
                 flash(f"deleted user {dlt_user}")
             if edit_user:
-                return redirect(f"edit/{edit_user}")
+                return redirect(url_for("admin.edit_user", username=edit_user))
             if edit_post:
                 return redirect(url_for("admin.edit_post", title=edit_post))
         return render_template(
@@ -34,18 +35,40 @@ def index():
         return redirect(url_for("auth.login"))
 
 
-@admin_blueprint.route("/edit/<username>")
-def user_edit(username):
+# User edit logic
+@admin_blueprint.route("/edit-user/<username>", methods=["POST", "GET"])
+def edit_user(username):
     if "email" and "username" and "type" in session:
         if session["type"] == "reader":
             flash("you are not allowed to be on this page.")
             return redirect(url_for("home.index"))
-        if users.query.filter_by(username=username).first():
-            return "OK"
-        flash("User not found")
-        return redirect(url_for("admin.index"))
+        user = users.query.filter_by(username=username).first()
+        if user:
+            if request.method == "POST":
+                req = request.form
+                change_email = req.get("change_email")
+                change_password = req.get("change_password")
+                role = req.get("role")
+                if change_email:
+                    user.email = change_email
+                    db.session.commit()
+                if change_password:
+                    user.password = Crypt.encrypt_password(change_password)
+                    db.session.commit()
+                if role:
+                    user.type = role
+                    db.session.commit()
+            return render_template("admin/edit-user.html", user=user)
+
+        else:
+            flash("User not found")
+            return redirect(url_for("admin.index"))
+    else:
+        flash("you need to be logged in")
+        return redirect(url_for("auth.login"))
 
 
+# Post editing logic
 @admin_blueprint.route("/edit-post/<title>", methods=["POST", "GET"])
 def edit_post(title):
     if "email" and "username" and "type" in session:
@@ -53,6 +76,9 @@ def edit_post(title):
             flash("you are not allowed to be on this page.")
             return redirect(url_for("home.index"))
         post = posts.query.filter_by(title=title).first()
+        if not post:
+            flash("post doesn't exist.")
+            return redirect(url_for("admin.index"))
         if request.method == "POST":
             req = request.form
             edited_title = req.get("edited-title")
@@ -62,8 +88,7 @@ def edit_post(title):
             db.session.commit()
             flash(f"Your changes have been commited")
             return redirect(url_for("admin.index"))
-        if not post:
-            flash("post doesn't exist.")
-            return redirect(url_for("admin.index"))
         return render_template("admin/edit-post.html", post=post)
-    return redirect(url_for("home.index"))
+    else:
+        flash("you need to be logged in")
+        return redirect(url_for("auth.login"))

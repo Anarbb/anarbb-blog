@@ -31,7 +31,7 @@
         {% endif %}
         <p class="card-text"><small class="black-text d-flex justify-content-start">{{ blog.created_date[:-7] }}</small>
         </p>
-        <a href="/post/read/{{ blog._id }}" class="black-text d-flex justify-content-end">
+        <a href="{{ url_for('post.read', id=blog._id) }}" class="black-text d-flex justify-content-end">
             <h5>Read more <i class="fa fa-angle-double-right" aria-hidden="true"></i></h5>
         </a>
     </div>
