@@ -1,4 +1,3 @@
-# Still under work
 from flask import Blueprint, url_for, session, redirect, render_template, flash, request
 from project import db
 from project.models import users, posts
