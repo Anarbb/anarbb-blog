@@ -53,9 +53,7 @@ Distributed under the GPL-3.0 license. See ``LICENSE`` for more information.
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
 
-## License
-
-GPL-3.0 License
+## Copyright
 
 Copyright (c) 2020 Anas Arbaoui
 
