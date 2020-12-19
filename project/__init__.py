@@ -32,13 +32,7 @@ def root():
 def error404(error):
     return render_template("404.html"), 404
 
-<<<<<<< HEAD
 
 @app.errorhandler(500)
-def error404(error):
+def error500(error):
     return render_template("500.html"), 500
-=======
-@app.errorhandler(500)
-def error404(error):
-    return render_template("500.html"), 500
->>>>>>> 43736199e61ab948a665f895e39b921d5229c052
