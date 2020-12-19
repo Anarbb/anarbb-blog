@@ -32,4 +32,13 @@
         </p>
     </div>
 </div>
+<div class="comment-section">
+    <form action="{{ url_for('post.comment') }}" method="POST">
+        <label for="comment"></label>
+        <textarea class="form-control" name="comment" id="comment" rows="5" wrap="soft" placeholder="Comment..."
+            maxlength="1000" required></textarea>
+        <br>
+        <button type="submit" class="btn btn-outline-light" style="float: right; height:50px">comment</button>
+    </form>
+</div>
 {% endblock %}

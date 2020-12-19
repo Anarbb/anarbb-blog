@@ -31,3 +31,16 @@ class posts(db.Model):
         self.post = post
         self.posted_by = posted_by
         self.views = views
+
+
+class comments(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    username = db.Column("username", db.Text(16))
+    comment = db.Column("comment", db.Text(1000))
+    comment_date = db.Column(
+        "comment_date", db.Text(32), default=datetime.utcnow, nullable=False
+    )
+
+    def __init__(self, username, comment, comment_date):
+        self.username = username
+        self.comment = comment

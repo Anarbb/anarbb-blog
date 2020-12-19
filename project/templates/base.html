@@ -42,7 +42,7 @@
                     {% if logged_in %}
                     {% if type == 'admin' %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('post.index') }}">Post</a>
+                        <a class="nav-link" href="{{ url_for('post.post') }}">Post</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin.index') }}">Admin panel</a>
