@@ -26,7 +26,7 @@ def post():
         return render_template("post/post.html")
     else:
         flash("you need to be logged in.")
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
 
 @post_blueprint.route("/read/<id>")
