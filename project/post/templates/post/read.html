@@ -9,6 +9,7 @@
 {% with messages = get_flashed_messages() %}
 {% for msg in messages %}
 <p class="text-light float-right">{{ msg }}</p>
+<br><br>
 {% endfor %}
 {% endwith %}
 <div class="blog-header">
@@ -32,7 +33,7 @@
         </p>
     </div>
 </div>
-<div class="comment-section">
+<div class="comment-submit-section">
     <form action="{{ url_for('post.comment') }}" method="POST">
         <label for="comment"></label>
         <textarea class="form-control" name="comment" id="comment" rows="5" wrap="soft" placeholder="Comment..."
@@ -41,4 +42,28 @@
         <button type="submit" class="btn btn-outline-light" style="float: right; height:50px">comment</button>
     </form>
 </div>
+{% if comments == [] %}
+<div class="no-comments">
+    <br><br>
+    <h6 style="color: white;">There is no comments.</h6>
+    <br>
+</div>
+{% else %}
+<br><br>
+<div class="comments">
+    <h3 style="color: white;">Comments:</h3><br>
+    <hr>
+    {% for comment in comments %}
+    <h5 style="color: white;">{{comment.username}}: </h5>
+    <pre style="color: white;">
+{{ comment.comment }}
+
+</pre>
+    <h6 class="d-flex justify-content-end" style="color: white;">at: {{ comment.comment_date[:-7] }}</h6>
+    <br>
+    <hr>
+    <br>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

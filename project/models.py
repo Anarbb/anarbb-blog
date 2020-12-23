@@ -40,7 +40,9 @@ class comments(db.Model):
     comment_date = db.Column(
         "comment_date", db.Text(32), default=datetime.utcnow, nullable=False
     )
+    postID = db.Column("postID", db.Text(99999999))
 
-    def __init__(self, username, comment, comment_date):
+    def __init__(self, username, comment, postID):
         self.username = username
         self.comment = comment
+        self.postID = postID

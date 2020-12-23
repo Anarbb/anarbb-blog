@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, request, flash, url_for, redirect,
 from project.cryptpw import Crypt
 from project import db
 from project.models import posts, comments
+from sqlalchemy import desc
 
 post_blueprint = Blueprint("post", __name__, template_folder="templates")
 
@@ -33,6 +34,7 @@ def post():
 def read(id):
     # Getting the ID of the thread from the link and passing it as a parameter to the query function and for checks
     post = posts.query.filter_by(_id=id).first()
+
     if post:
         if id in session:
             pass
@@ -43,7 +45,11 @@ def read(id):
             session[id] = id
             db.session.commit()
         return render_template(
-            "post/read.html", post=posts.query.filter_by(_id=id).first()
+            "post/read.html",
+            post=posts.query.filter_by(_id=id).first(),
+            comments=comments.query.filter_by(postID=id)
+            .order_by(desc(comments._id))
+            .all(),
         )
     else:
         flash("this post doesn't exist.")
@@ -61,6 +67,16 @@ def comment():
     if can_comment == True:
         req = request.form
         comment = req.get("comment")
+        data = comments(session["username"], comment, request.referrer[-1])
+        db.session.add(data)
+        db.session.commit()
+        flash("Your comment have been posted!")
+        return redirect(request.referrer)
     else:
         flash("You need to be logged in to comment.")
         return redirect(url_for("auth.login"))
+
+
+@post_blueprint.route("/read/comment/delete/<id>", methods=["POST", "GET"])
+def comment_delete(id):
+    return id

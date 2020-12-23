@@ -21,6 +21,9 @@ python3.8 app.py
 * Easy first time run install.
 
 ## Release History
+* 0.0.5
+    * Added a comment section (god this is pain why ppl are just going to comment penis over and over)
+
 * 0.0.4
     * Added an admin panel
     
