@@ -75,8 +75,3 @@ def comment():
     else:
         flash("You need to be logged in to comment.")
         return redirect(url_for("auth.login"))
-
-
-@post_blueprint.route("/read/comment/delete/<id>", methods=["POST", "GET"])
-def comment_delete(id):
-    return id
