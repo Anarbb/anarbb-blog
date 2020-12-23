@@ -13,7 +13,7 @@ Password: CpJpQ69eYNFBAzK
 pip install -r requirments.txt
 ```
 ```sh
-python3.8 app.py
+python3.9 app.py
 ```
 
 ## Planned Features
