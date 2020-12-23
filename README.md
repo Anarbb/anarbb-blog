@@ -22,7 +22,7 @@ python3.8 app.py
 
 ## Release History
 * 0.0.5
-    * Added a comment section (god this is pain why ppl are just going to comment penis over and over)
+    * Added a comment section (god this is pain why, ppl are just going to comment penis over and over)
 
 * 0.0.4
     * Added an admin panel
