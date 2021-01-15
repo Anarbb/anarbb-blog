@@ -25,7 +25,7 @@
         <hr>
         <form action="{{ url_for('admin.edit_user', username=user.username) }}" method='POST'>
             <div class="form-group">
-                <label for="password">change your password</label>
+                <label for="password">change {{ user.username }} password</label>
                 <input type="password" class="form-control" id="change_password" name="change_password"
                     placeholder="xxxxxxxxx" data-minlength="8"
                     title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
